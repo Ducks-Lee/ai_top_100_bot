@@ -1,0 +1,33 @@
+{
+  "_설명": "공개용 예시 설정. 대회 원문(액션 API 문서, 규정 문서)이 아니라 지어낸 값이다. 실제 운영 값은 data/cs_config.json(git 제외)에 같은 형식으로 둔다.",
+  "endpoints": [
+    {"no": "EX-01", "name": "get_product", "method": "GET", "path": "/api/products/{sku}", "desc": "상품 조회(판매가, 판매 상태)"},
+    {"no": "EX-02", "name": "get_order", "method": "GET", "path": "/api/orders/{order_no}", "desc": "주문 조회(회원, 상태, 금액, 품목)", "owner": "order"},
+    {"no": "EX-03", "name": "search_orders_by_member", "method": "GET", "path": "/api/orders", "desc": "회원의 주문 이력", "query": ["member_id"], "owner": "member"},
+    {"no": "EX-04", "name": "get_shipment", "method": "GET", "path": "/api/shipments/{shipment_id}", "desc": "배송 조회", "owner": "shipment"},
+    {"no": "EX-05", "name": "search_shipments_by_order", "method": "GET", "path": "/api/shipments", "desc": "주문별 배송 검색. 빈 배열이면 아직 출고 전", "query": ["order_no"], "owner": "order"},
+    {"no": "EX-06", "name": "get_member", "method": "GET", "path": "/api/members/{member_id}", "desc": "회원 조회", "owner": "member"},
+    {"no": "EX-07", "name": "search_members_by_name", "method": "GET", "path": "/api/members", "desc": "이름으로 회원 검색", "query": ["name"]},
+    {"no": "EX-08", "name": "get_payment", "method": "GET", "path": "/api/payments/{approval_no}", "desc": "결제 조회", "owner": "approval"},
+    {"no": "EX-09", "name": "get_subscription", "method": "GET", "path": "/api/subscriptions/{subscription_id}", "desc": "정기배송 조회", "owner": "subscription"},
+    {"no": "EX-10", "name": "search_tickets_by_member", "method": "GET", "path": "/api/tickets", "desc": "회원별 상담 이력", "query": ["member_id"], "owner": "member"},
+    {"no": "EX-11", "name": "request_address_change", "method": "POST", "path": "/api/orders/{order_no}/address-change-requests", "desc": "배송지 변경 접수", "body": {"new_address": {"type": "string"}}, "owner": "order"},
+    {"no": "EX-12", "name": "request_refund", "method": "POST", "path": "/api/refunds", "desc": "환불 신청. 고객이 환불을 고른 뒤에만", "body": {"order_no": {"type": "string"}, "amount": {"type": "integer"}, "reason": {"type": "string"}}, "owner": "body_order"},
+    {"no": "EX-13", "name": "request_coupon_issue", "method": "POST", "path": "/api/members/{member_id}/coupon-issue-requests", "desc": "보상 쿠폰 발급 접수(설정의 issuable_promos만)", "body": {"promo_code": {"type": "string"}}, "owner": "member"},
+    {"no": "EX-14", "name": "create_escalation", "method": "POST", "path": "/api/escalations", "desc": "담당자 이관 접수. reason 맨 앞에 이관 대상 태그를 적는다. 답에는 결과의 escalation_id를 알려 준다", "body": {"lane": {"type": "string"}, "reason": {"type": "string"}}}
+  ],
+  "order_no_pattern": "^\\d{9}$",
+  "issuable_promos": ["COMP3000", "COMP5000"],
+  "escalation": {"handoff_lane": "HANDOFF", "claim_lane": "CLAIM", "ops_tag": "[OPS]", "safety_tag": "[SAFETY]"},
+  "calendar": {
+    "default_today": "2030-03-05",
+    "holidays": ["2030-03-01", "2030-05-01", "2030-05-06", "2030-06-06"],
+    "ship_weekdays": [1, 3],
+    "reply_business_days": 2,
+    "calendar_deadline_days": 10,
+    "cutoff_business_days": 2
+  },
+  "refund": {"partial_low": 25, "partial_high": 75, "partial_mid_ratio": 0.4, "min_amount": 500, "round_unit": 100, "discretion_limit": 30000},
+  "weight": {"label_tolerance": 0.04, "natural_loss": 0.02},
+  "allergy": {"farm_items": "견과류", "sea_items": "갑각류"}
+}

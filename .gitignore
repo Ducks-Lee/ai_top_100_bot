@@ -1,0 +1,32 @@
+# 개인정보가 들어 있는 메일 원본
+*.eml
+
+# 비밀값
+.env
+.env.*
+!.env.example
+
+# 외부 공유용 문서 (저장소에 두지 않음)
+share/
+
+# 로그 (사용자 식별 정보가 섞일 수 있음)
+logs/
+
+# 실패 알림 마지막 전송 시각 (notify_failure.py)
+.last_failure_alert
+
+# Python
+__pycache__/
+.pytest_cache/
+*.pyc
+.venv/
+.venv-ocr/
+
+# OCR 시험 샘플과 결과 (tools/ocr/make_samples.py로 다시 만들 수 있음)
+tools/ocr/samples/
+
+# Codex 교차검토 기록 (작업용, 저장소에 두지 않음)
+crosscheck.md
+
+# 대회 데이터 원본·정제본 (외부 공유 금지, EC2에는 scp로 보낸다)
+data/

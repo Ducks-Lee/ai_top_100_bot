@@ -1,0 +1,4 @@
+# BOT_DOMAIN을 실제 도메인으로 바꾼다. Caddy가 HTTPS 인증서를 자동으로 발급하고 갱신한다.
+BOT_DOMAIN {
+	reverse_proxy 127.0.0.1:8000
+}

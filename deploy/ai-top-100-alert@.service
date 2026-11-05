@@ -1,0 +1,16 @@
+[Unit]
+# ai-top-100.service의 OnFailure=가 실행한다. %i는 실패한 유닛 이름(ai-top-100.service)이다.
+Description=AI_TOP_100 failure alert for %i
+
+[Service]
+Type=oneshot
+User=ubuntu
+# 실패 직전 로그(처리되지 않은 예외의 traceback 포함)를 시스템 저널에서 읽을 수 있게 한다.
+SupplementaryGroups=systemd-journal
+# 마지막 알림 시각을 /var/lib/ai-top-100-alert에 남긴다(STATE_DIRECTORY 환경변수로 전달됨).
+StateDirectory=ai-top-100-alert
+WorkingDirectory=/home/ubuntu/ai_top_100
+# 알림에 찍는 시각을 한국 시간으로 맞춘다.
+Environment=TZ=Asia/Seoul
+# DISCORD_WEBHOOK_URL은 프로그램이 WorkingDirectory의 .env에서 직접 읽는다(config.py).
+ExecStart=/home/ubuntu/ai_top_100/.venv/bin/python notify_failure.py %i

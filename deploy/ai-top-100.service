@@ -1,0 +1,23 @@
+[Unit]
+Description=AI_TOP_100 Kakao bot (gateway worker)
+After=network-online.target
+Wants=network-online.target
+# 실패하면 디스코드로 알린다(notify_failure.py). 자동 재시작되는 실패에도 실행되며, 반복 알림은 스크립트가 거른다.
+OnFailure=ai-top-100-alert@%n.service
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/ai_top_100
+# 환경변수는 프로그램이 WorkingDirectory의 .env에서 직접 읽는다(config.py).
+# 로그 시각과 자정 로그 교체를 한국 시간 기준으로 맞춘다(EC2 기본값은 UTC).
+Environment=TZ=Asia/Seoul
+ExecStart=/home/ubuntu/ai_top_100/.venv/bin/python gateway.py
+Restart=always
+RestartSec=3
+# BOT_TOKEN 미설정, 잘못된 페이로드(4003)처럼 재시작해도 해결되지 않는 오류(gateway.EXIT_FATAL)는 재시작하지 않는다.
+RestartPreventExitStatus=2
+# 종료할 때 진행 중인 답장(최대 5분)이 끝날 때까지 기다린다.
+TimeoutStopSec=300
+
+[Install]
+WantedBy=multi-user.target
